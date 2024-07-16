@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:gap/gap.dart';
 
 class ImplicitAnimationsScreen extends StatefulWidget {
   const ImplicitAnimationsScreen({
@@ -66,8 +64,7 @@ class _ImplicitAnimationsScreenState extends State<ImplicitAnimationsScreen> {
                   width: size.width * 0.8,
                   height: size.width * 0.8,
                   child: AnimatedAlign(
-                    curve: Curves.linear,
-                    duration: _duration * 1.1,
+                    duration: _duration,
                     alignment:
                         _change ? Alignment.centerLeft : Alignment.centerRight,
                     child: Container(
