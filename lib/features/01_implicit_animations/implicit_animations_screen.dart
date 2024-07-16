@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 
 class ImplicitAnimationsScreen extends StatefulWidget {
@@ -12,11 +14,10 @@ class ImplicitAnimationsScreen extends StatefulWidget {
 }
 
 class _ImplicitAnimationsScreenState extends State<ImplicitAnimationsScreen> {
-  // final AnimationController _controller = AnimationController(
-  //   duration: const Duration(seconds: 1),
-  //   vsync: this,
-  // );
-  bool _change = false;
+  bool _change = true;
+  Timer? _timer;
+  final Duration _duration = const Duration(microseconds: 1300000);
+
   void _trigger() {
     setState(() {
       _change = !_change;
@@ -24,10 +25,25 @@ class _ImplicitAnimationsScreenState extends State<ImplicitAnimationsScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    _timer = Timer.periodic(_duration, (timer) {
+      _trigger();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: _change ? Colors.black : Colors.white,
+      backgroundColor: _change ? Colors.white : Colors.black,
       appBar: AppBar(
         title: const Text("Implicit Animations"),
       ),
@@ -42,7 +58,7 @@ class _ImplicitAnimationsScreenState extends State<ImplicitAnimationsScreen> {
                   width: size.width * 0.8,
                   height: size.width * 0.8,
                   decoration: BoxDecoration(
-                    shape: _change ? BoxShape.rectangle : BoxShape.circle,
+                    shape: _change ? BoxShape.circle : BoxShape.rectangle,
                     color: Colors.red,
                   ),
                 ),
@@ -50,23 +66,19 @@ class _ImplicitAnimationsScreenState extends State<ImplicitAnimationsScreen> {
                   width: size.width * 0.8,
                   height: size.width * 0.8,
                   child: AnimatedAlign(
-                    duration: const Duration(seconds: 1),
+                    curve: Curves.linear,
+                    duration: _duration * 1.1,
                     alignment:
-                        _change ? Alignment.centerRight : Alignment.centerLeft,
+                        _change ? Alignment.centerLeft : Alignment.centerRight,
                     child: Container(
                       width: size.width * 0.05,
                       height: size.width * 0.8,
-                      color: _change ? Colors.white : Colors.black,
+                      color: _change ? Colors.black : Colors.white,
                     ),
                   ),
                 ),
               ],
             ),
-            const Gap(10),
-            ElevatedButton(
-              onPressed: _trigger,
-              child: const Text("Go"),
-            )
           ],
         ),
       ),
