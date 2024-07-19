@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hary_animation/features/01_implicit_animations/implicit_animations_screen.dart';
 
 import 'package:hary_animation/features/02_explicit_animation/explicit_animation_screen.dart';
+import 'package:hary_animation/features/03_custom_painter/custom_painter.dart';
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({super.key});
@@ -36,6 +37,12 @@ class MenuScreen extends StatelessWidget {
                   _goToPage(context, const ExplicitAnimationScreen()),
               child: const Text(
                 "Explicit Animations",
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => _goToPage(context, const CustomPainterScreen()),
+              child: const Text(
+                "Custom Painter",
               ),
             ),
           ],
