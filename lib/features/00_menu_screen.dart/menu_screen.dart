@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hary_animation/features/01_implicit_animations/implicit_animations_screen.dart';
+
 import 'package:hary_animation/features/02_explicit_animation/explicit_animation_screen.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -36,7 +37,7 @@ class MenuScreen extends StatelessWidget {
               child: const Text(
                 "Explicit Animations",
               ),
-            )
+            ),
           ],
         ),
       ),
