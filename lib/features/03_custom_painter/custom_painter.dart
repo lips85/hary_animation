@@ -14,14 +14,27 @@ class _CustomPainterScreenState extends State<CustomPainterScreen>
   late final AnimationController _animationController = AnimationController(
     vsync: this,
     duration: Duration(seconds: setTime),
-    lowerBound: 0.0005,
-    upperBound: 2.0,
   );
 
   int setTime = 10;
-
   bool _pressedPlay = false;
   bool _selected = false;
+
+  final List settingTime = [10, 20, 30, 40, 50, 60, 120];
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   void _play() {
     _animationController.forward();
@@ -45,10 +58,10 @@ class _CustomPainterScreenState extends State<CustomPainterScreen>
   }
 
   void _setTime(int time) {
-    setTime = time;
-    _animationController.duration = Duration(seconds: setTime);
-    _animationController.reset(); // 타이머 초기화
     setState(() {
+      setTime = time;
+      _animationController.duration = Duration(seconds: setTime);
+      _animationController.reset();
       _selected = true;
     });
   }
@@ -61,12 +74,10 @@ class _CustomPainterScreenState extends State<CustomPainterScreen>
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    Duration remaining =
+        _animationController.duration! * (1 - _animationController.value);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -76,89 +87,102 @@ class _CustomPainterScreenState extends State<CustomPainterScreen>
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          OverflowBar(
-            overflowAlignment: OverflowBarAlignment.center,
+          SizedBox(
+            height: 50, // 고정된 높이 설정
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: settingTime.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return const Gap(20);
+              },
+              itemBuilder: (BuildContext context, int index) {
+                return AnimatedOpacity(
+                  opacity: _selected ? 1.0 : 0.5,
+                  duration: const Duration(milliseconds: 500),
+                  child: TextButton(
+                    onPressed: () {
+                      if (!_pressedPlay) {
+                        _setTime(settingTime[index]);
+                      }
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.red.shade300, // 배경 색상
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12), // 패딩
+                      textStyle: const TextStyle(fontSize: 16), // 텍스트 스타일
+                    ),
+                    child: Text(
+                      "${settingTime[index].toString()}초",
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          const Gap(100),
+          Stack(
+            alignment: Alignment.center,
             children: [
-              TextButton(
-                onPressed: () {
-                  _setTime(10);
-                },
-                child: const Text(
-                  "10초",
-                ),
+              Text(
+                _formatDuration(remaining),
+                style: const TextStyle(fontSize: 24),
               ),
-              TextButton(
-                onPressed: () {
-                  _setTime(60);
-                },
-                child: const Text(
-                  "1분",
+              CustomPaint(
+                painter: PomodoroPainter(
+                  progress: _animationController.value,
+                ),
+                child: const SizedBox(
+                  width: 300,
+                  height: 300,
                 ),
               ),
             ],
-          ),
-          const Gap(100),
-          AnimatedBuilder(
-            animation: _animationController,
-            builder: (BuildContext context, Widget? child) {
-              Duration remaining = _animationController.duration! *
-                  (1 - _animationController.value);
-              // 초기 시작 시간을 표시
-              String displayTime = _pressedPlay
-                  ? _formatDuration(remaining)
-                  : _formatDuration(Duration(seconds: setTime));
-              return Stack(
-                alignment: Alignment.center,
-                children: [
-                  Text(
-                    displayTime,
-                    style: const TextStyle(fontSize: 24),
-                  ),
-                  CustomPaint(
-                    painter: PomodoroPainter(
-                      progress: _animationController.value,
-                    ),
-                    child: const SizedBox(
-                      width: 300,
-                      height: 300,
-                    ),
-                  ),
-                ],
-              );
-            },
           ),
           const Gap(100),
           _selected
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    IconButton.filled(
-                      iconSize: 40,
-                      onPressed: _reset,
-                      icon: const Icon(Icons.rotate_left_sharp),
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.grey.shade300,
+                    AnimatedOpacity(
+                      opacity: _selected ? 1.0 : 0.5,
+                      duration: const Duration(milliseconds: 500),
+                      child: IconButton.filled(
+                        iconSize: 40,
+                        onPressed: _reset,
+                        icon: const Icon(Icons.rotate_left_sharp),
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.grey.shade300,
+                        ),
                       ),
                     ),
                     const Gap(20),
-                    IconButton.filled(
-                      padding: const EdgeInsets.all(25),
-                      iconSize: 40,
-                      onPressed: _pressedPlay ? _stop : _play,
-                      icon: _pressedPlay
-                          ? const Icon(Icons.pause)
-                          : const Icon(Icons.play_arrow),
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.red,
+                    AnimatedOpacity(
+                      opacity: _selected ? 1.0 : 0.5,
+                      duration: const Duration(milliseconds: 500),
+                      child: IconButton.filled(
+                        padding: const EdgeInsets.all(25),
+                        iconSize: 40,
+                        onPressed: _pressedPlay ? _stop : _play,
+                        icon: _pressedPlay
+                            ? const Icon(Icons.pause)
+                            : const Icon(Icons.play_arrow),
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.red.shade300,
+                        ),
                       ),
                     ),
                     const Gap(20),
-                    IconButton.filled(
-                      iconSize: 40,
-                      onPressed: _stop,
-                      icon: const Icon(Icons.stop),
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.grey.shade300,
+                    AnimatedOpacity(
+                      opacity: _selected ? 1.0 : 0.5,
+                      duration: const Duration(milliseconds: 500),
+                      child: IconButton.filled(
+                        iconSize: 40,
+                        onPressed: _stop,
+                        icon: const Icon(Icons.stop),
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.grey.shade300,
+                        ),
                       ),
                     ),
                   ],
@@ -192,7 +216,7 @@ class PomodoroPainter extends CustomPainter {
     );
 
     final timePaint = Paint()
-      ..color = Colors.red
+      ..color = Colors.red.shade300
       ..strokeWidth = 20
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
