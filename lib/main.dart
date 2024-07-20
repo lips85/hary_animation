@@ -15,7 +15,6 @@ class HaryAnimation extends StatelessWidget {
       title: 'Flutter Animation MasterClass',
       theme: ThemeData(
         useMaterial3: true,
-        colorSchemeSeed: Colors.grey,
       ),
       home: const CustomPainterScreen(),
     );

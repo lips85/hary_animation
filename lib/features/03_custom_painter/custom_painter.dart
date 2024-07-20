@@ -10,7 +10,28 @@ class CustomPainterScreen extends StatefulWidget {
   State<CustomPainterScreen> createState() => _CustomPainterScreenState();
 }
 
-class _CustomPainterScreenState extends State<CustomPainterScreen> {
+class _CustomPainterScreenState extends State<CustomPainterScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animationController = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 5),
+    reverseDuration: const Duration(seconds: 2),
+  );
+
+  bool _pressedPlay = false;
+
+  void _play() {
+    // _animationController.forward();
+    setState(() {
+      _pressedPlay = !_pressedPlay;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,30 +50,37 @@ class _CustomPainterScreenState extends State<CustomPainterScreen> {
                 height: 300,
               ),
             ),
-            const Gap(30),
+            const Gap(100),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton.filledTonal(
+                IconButton.filled(
                   iconSize: 40,
                   onPressed: () {},
-                  icon: const Icon(
-                    Icons.rotate_left_sharp,
+                  icon: const Icon(Icons.rotate_left_sharp),
+                  style: IconButton.styleFrom(
+                    backgroundColor: Colors.grey.shade300, // 회색 배경색 설정
                   ),
                 ),
-                IconButton(
-                  padding: const EdgeInsets.all(20),
+                const Gap(20), // 아이콘 간 간격을 위해 추가
+                IconButton.filled(
+                  padding: const EdgeInsets.all(25),
                   iconSize: 40,
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.play_arrow,
+                  onPressed: _play,
+                  icon: _pressedPlay
+                      ? const Icon(Icons.pause)
+                      : const Icon(Icons.play_arrow),
+                  style: IconButton.styleFrom(
+                    backgroundColor: Colors.red, // 회색 배경색 설정
                   ),
                 ),
-                IconButton(
+                const Gap(20), // 아이콘 간 간격을 위해 추가
+                IconButton.filled(
                   iconSize: 40,
                   onPressed: () {},
-                  icon: const Icon(
-                    Icons.stop,
+                  icon: const Icon(Icons.stop),
+                  style: IconButton.styleFrom(
+                    backgroundColor: Colors.grey.shade300, // 회색 배경색 설정
                   ),
                 ),
               ],
