@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -20,13 +21,21 @@ class _CustomPainterScreenState extends State<CustomPainterScreen>
   bool _pressedPlay = false;
   bool _selected = false;
 
-  final List settingTime = [10, 20, 30, 40, 50, 60, 120];
+  final List<int> settingTime = [10, 20, 30, 40, 50, 60, 120];
 
   @override
   void initState() {
     super.initState();
     _animationController.addListener(() {
       setState(() {});
+      if (_animationController.isCompleted) {
+        Timer(const Duration(seconds: 1), () {
+          setState(() {
+            _pressedPlay = false;
+            _animationController.reset();
+          });
+        });
+      }
     });
   }
 
@@ -90,6 +99,7 @@ class _CustomPainterScreenState extends State<CustomPainterScreen>
           SizedBox(
             height: 50, // 고정된 높이 설정
             child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               scrollDirection: Axis.horizontal,
               itemCount: settingTime.length,
               separatorBuilder: (BuildContext context, int index) {
@@ -124,9 +134,20 @@ class _CustomPainterScreenState extends State<CustomPainterScreen>
           Stack(
             alignment: Alignment.center,
             children: [
-              Text(
-                _formatDuration(remaining),
-                style: const TextStyle(fontSize: 24),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+                child: Text(
+                  _formatDuration(remaining),
+                  key: ValueKey<String>(_formatDuration(remaining)),
+                  style: TextStyle(
+                    fontSize: 60,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.red.shade300,
+                  ),
+                ),
               ),
               CustomPaint(
                 painter: PomodoroPainter(
@@ -222,7 +243,7 @@ class PomodoroPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final basePaint = Paint()
-      ..color = Colors.grey.shade200
+      ..color = Colors.grey.shade300
       ..strokeWidth = 20
       ..style = PaintingStyle.stroke;
 
