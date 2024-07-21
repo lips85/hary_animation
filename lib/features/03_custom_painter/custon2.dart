@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 
 class CustomPainter2Screen extends StatefulWidget {
@@ -30,12 +29,15 @@ class _CustomPainter2ScreenState extends State<CustomPainter2Screen>
     _animationController.addListener(() {
       setState(() {});
       if (_animationController.isCompleted) {
-        Timer(const Duration(seconds: 1), () {
-          setState(() {
-            _pressedPlay = false;
-            _animationController.reset();
-          });
-        });
+        Timer(
+          const Duration(seconds: 1),
+          () {
+            setState(() {
+              _pressedPlay = false;
+              _animationController.reset();
+            });
+          },
+        );
       }
     });
   }
@@ -68,27 +70,39 @@ class _CustomPainter2ScreenState extends State<CustomPainter2Screen>
   }
 
   void increaseMinute() {
-    setState(() {
-      _minutes = _minutes + 1;
-    });
+    if (_minutes < 60) {
+      setState(() {
+        _minutes = _minutes + 1;
+      });
+    }
   }
 
   void decreaseMinute() {
-    setState(() {
-      _minutes = _minutes - 1;
-    });
+    if (_minutes > 0) {
+      setState(() {
+        _minutes = _minutes - 1;
+      });
+    }
   }
 
   void increaseSecond() {
-    setState(() {
-      _seconds = _seconds + 1;
-    });
+    if (_seconds < 60) {
+      setState(() {
+        _seconds = _seconds + 1;
+      });
+    }
   }
 
   void decreaseSecond() {
-    setState(() {
-      _seconds = _seconds - 1;
-    });
+    if (_seconds > 0) {
+      setState(() {
+        _seconds = _seconds - 1;
+      });
+    }
+  }
+
+  void _confirmSetTime() {
+    _setTime(_minutes * 60 + _seconds);
   }
 
   void _setTime(int time) {
@@ -125,109 +139,142 @@ class _CustomPainter2ScreenState extends State<CustomPainter2Screen>
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TextButton(
-            onPressed: () {},
-            child: const Text(
-              "Confirm",
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w800,
-              ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 30),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: (_selected && !_pressedPlay)
+                  ? Colors.green
+                  : Colors.red.shade200,
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                children: [
-                  Stack(
-                    children: [
-                      const SizedBox(
-                        height: 80,
-                        width: 50,
-                      ),
-                      Positioned(
-                        top: 0,
-                        child: IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.arrow_drop_up_rounded,
-                            size: 50,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        child: IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.arrow_drop_down_rounded,
-                            size: 50,
-                          ),
-                        ),
-                      ),
-                    ],
+            child: Column(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    if (!_pressedPlay) {
+                      _confirmSetTime();
+                    }
+                  },
+                  child: const Text(
+                    "Confirm",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
-                ],
-              ),
-              const Text(
-                "01",
-                style: TextStyle(
-                  fontSize: 70,
-                  fontWeight: FontWeight.w600,
                 ),
-              ),
-              const Text(
-                ":",
-                style: TextStyle(
-                  fontSize: 70,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const Text(
-                "02",
-                style: TextStyle(
-                  fontSize: 70,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Column(
-                children: [
-                  Stack(
-                    children: [
-                      const SizedBox(
-                        height: 80,
-                        width: 50,
-                      ),
-                      Positioned(
-                        top: 0,
-                        child: IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.arrow_drop_up_rounded,
-                            size: 50,
-                          ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        Stack(
+                          children: [
+                            const SizedBox(
+                              height: 80,
+                              width: 50,
+                            ),
+                            Positioned(
+                              top: 0,
+                              child: IconButton(
+                                padding: EdgeInsets.zero,
+                                onPressed: increaseMinute,
+                                icon: const Icon(
+                                  Icons.arrow_drop_up_rounded,
+                                  size: 50,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              child: IconButton(
+                                padding: EdgeInsets.zero,
+                                onPressed: decreaseMinute,
+                                icon: const Icon(
+                                  Icons.arrow_drop_down_rounded,
+                                  size: 50,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        child: IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.arrow_drop_down_rounded,
-                            size: 50,
+                      ],
+                    ),
+                    (_minutes < 10)
+                        ? Text(
+                            joinStrings(["0", _minutes.toString()]),
+                            style: const TextStyle(
+                              fontSize: 70,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          )
+                        : Text(
+                            _minutes.toString(),
+                            style: const TextStyle(
+                              fontSize: 70,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
+                    const Text(
+                      ":",
+                      style: TextStyle(
+                        fontSize: 70,
+                        fontWeight: FontWeight.w600,
                       ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+                    ),
+                    (_seconds < 10)
+                        ? Text(
+                            joinStrings(["0", _seconds.toString()]),
+                            style: const TextStyle(
+                              fontSize: 70,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          )
+                        : Text(
+                            _seconds.toString(),
+                            style: const TextStyle(
+                              fontSize: 70,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                    Column(
+                      children: [
+                        Stack(
+                          children: [
+                            const SizedBox(
+                              height: 80,
+                              width: 50,
+                            ),
+                            Positioned(
+                              top: 0,
+                              child: IconButton(
+                                padding: EdgeInsets.zero,
+                                onPressed: increaseSecond,
+                                icon: const Icon(
+                                  Icons.arrow_drop_up_rounded,
+                                  size: 50,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              child: IconButton(
+                                padding: EdgeInsets.zero,
+                                onPressed: decreaseSecond,
+                                icon: const Icon(
+                                  Icons.arrow_drop_down_rounded,
+                                  size: 50,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
           const Gap(50),
           Stack(
