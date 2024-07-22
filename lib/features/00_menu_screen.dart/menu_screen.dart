@@ -3,6 +3,8 @@ import 'package:hary_animation/features/01_implicit_animations/implicit_animatio
 
 import 'package:hary_animation/features/02_explicit_animation/explicit_animation_screen.dart';
 import 'package:hary_animation/features/03_custom_painter/custom_painter.dart';
+import 'package:hary_animation/features/03_custom_painter/custon2.dart';
+import 'package:hary_animation/features/04_swiping_card/swiping_card_screen.dart';
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({super.key});
@@ -43,6 +45,18 @@ class MenuScreen extends StatelessWidget {
               onPressed: () => _goToPage(context, const CustomPainterScreen()),
               child: const Text(
                 "Custom Painter",
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => _goToPage(context, const CustomPainter2Screen()),
+              child: const Text(
+                "Custom Painter2",
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => _goToPage(context, const SwipingCardScreen()),
+              child: const Text(
+                "Swiping Card",
               ),
             ),
           ],
