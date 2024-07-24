@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hary_animation/features/00_menu_screen.dart/menu_screen.dart';
-import 'package:hary_animation/features/04_swiping_card/swiping_card_screen.dart';
+import 'package:hary_animation/0_challenges/features/00_menu_screen.dart/menu_screen.dart';
+import 'package:hary_animation/0_challenges/features/04_swiping_card/swiping_card_screen.dart';
 
 void main() {
   runApp(const HaryAnimation());

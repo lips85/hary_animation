@@ -38,6 +38,8 @@ dependencies:
   animations: ^2.0.11
   rive: ^0.13.9
   gap: ^3.0.1
+  provider: ^6.1.2
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:
