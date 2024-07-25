@@ -1,4 +1,5 @@
 // lib/1_final_project/repositories/artwork_repository.dart
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hary_animation/1_final_project/services/api_service.dart';
 import 'package:hary_animation/1_final_project/models/artwork.dart';
 
@@ -17,3 +18,7 @@ class ArtworkRepository {
     return Artwork.fromJson(data);
   }
 }
+
+final artworkRepositoryProvider = Provider((ref) {
+  return ArtworkRepository(ref.watch(apiServiceProvider));
+});

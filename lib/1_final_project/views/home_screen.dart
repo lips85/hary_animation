@@ -1,47 +1,63 @@
 // lib/1_final_project/views/home_screen.dart
 import 'package:flutter/material.dart';
-import 'package:hary_animation/1_final_project/views/widgets/artwork_list_item.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hary_animation/1_final_project/models/artwork.dart';
 import 'package:hary_animation/1_final_project/viewmodels/artwork_list_viewmodel.dart';
+import 'package:hary_animation/1_final_project/views/artwork_detail_screen.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ArtworkListViewModel>(context, listen: false).fetchArtworks();
+      ref.read(artworkListProvider.notifier).fetchArtworks();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final artworks = ref.watch(artworkListProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Art Institute of Chicago'),
       ),
-      body: Consumer<ArtworkListViewModel>(
-        builder: (context, viewModel, child) {
-          if (viewModel.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (viewModel.artworks.isEmpty) {
-            return const Center(child: Text('No artworks found!'));
-          } else {
-            return ListView.builder(
-              itemCount: viewModel.artworks.length,
+      body: artworks.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: artworks.length,
               itemBuilder: (context, index) {
-                return ArtworkListItem(artwork: viewModel.artworks[index]);
+                final artwork = artworks[index];
+                return ListTile(
+                  leading: artwork.imageUrl.isNotEmpty
+                      ? Image.network(artwork.imageUrl,
+                          width: 50, height: 50, fit: BoxFit.cover)
+                      : Container(
+                          width: 50,
+                          height: 50,
+                          color: Colors.grey,
+                          child: const Icon(Icons.image, color: Colors.white)),
+                  title: Text(artwork.title),
+                  subtitle: Text(artwork.artist),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ArtworkDetailScreen(artworkId: artwork.id),
+                      ),
+                    );
+                  },
+                );
               },
-            );
-          }
-        },
-      ),
+            ),
     );
   }
 }

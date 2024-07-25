@@ -1,6 +1,7 @@
 // lib/1_final_project/services/api_service.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ApiService {
   final String _baseUrl = 'https://api.artic.edu/api/v1';
@@ -37,3 +38,5 @@ class ApiService {
     }
   }
 }
+
+final apiServiceProvider = Provider((ref) => ApiService());
