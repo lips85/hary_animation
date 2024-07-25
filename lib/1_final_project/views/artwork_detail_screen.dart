@@ -12,7 +12,7 @@ class ArtworkDetailScreen extends StatefulWidget {
   const ArtworkDetailScreen({super.key, required this.artworkId});
 
   @override
-  _ArtworkDetailScreenState createState() => _ArtworkDetailScreenState();
+  State<ArtworkDetailScreen> createState() => _ArtworkDetailScreenState();
 }
 
 class _ArtworkDetailScreenState extends State<ArtworkDetailScreen> {

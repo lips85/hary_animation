@@ -1,14 +1,14 @@
 // lib/1_final_project/views/home_screen.dart
 import 'package:flutter/material.dart';
+import 'package:hary_animation/1_final_project/views/widgets/artwork_list_item.dart';
 import 'package:provider/provider.dart';
 import 'package:hary_animation/1_final_project/viewmodels/artwork_list_viewmodel.dart';
-import 'package:hary_animation/1_final_project/widgets/artwork_list_item.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
