@@ -1,7 +1,6 @@
 // lib/1_final_project/views/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hary_animation/1_final_project/models/artwork.dart';
 import 'package:hary_animation/1_final_project/viewmodels/artwork_list_viewmodel.dart';
 import 'package:hary_animation/1_final_project/views/artwork_detail_screen.dart';
 

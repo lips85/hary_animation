@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hary_animation/1_final_project/viewmodels/artwork_detail_viewmodel.dart';
-import 'package:hary_animation/1_final_project/models/artwork.dart';
 
 class ArtworkDetailScreen extends ConsumerWidget {
   final int artworkId;
