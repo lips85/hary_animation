@@ -5,18 +5,24 @@ class Artwork {
   final String artist;
   final String imageUrl;
 
-  Artwork(
-      {required this.id,
-      required this.title,
-      required this.artist,
-      required this.imageUrl});
+  Artwork({
+    required this.id,
+    required this.title,
+    required this.artist,
+    required this.imageUrl,
+  });
 
   factory Artwork.fromJson(Map<String, dynamic> json) {
+    String imageUrl = '';
+    if (json['image_id'] != null && json['image_id'].isNotEmpty) {
+      imageUrl =
+          'https://www.artic.edu/iiif/2/${json['image_id']}/full/600,/0/default.jpg';
+    }
     return Artwork(
       id: json['id'],
       title: json['title'],
-      artist: json['artist_display'],
-      imageUrl: json['image_url'] ?? '', // JSON에서 이미지 URL 가져오기, 없을 경우 빈 문자열
+      artist: json['artist_display'] ?? '',
+      imageUrl: imageUrl,
     );
   }
 }

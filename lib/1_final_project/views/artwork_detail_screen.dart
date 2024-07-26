@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hary_animation/1_final_project/viewmodels/artwork_detail_viewmodel.dart';
+import 'package:hary_animation/1_final_project/models/artwork.dart';
 
 class ArtworkDetailScreen extends ConsumerWidget {
   final int artworkId;
@@ -21,9 +22,12 @@ class ArtworkDetailScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              artwork.imageUrl.isNotEmpty
-                  ? Image.network(artwork.imageUrl, fit: BoxFit.cover)
-                  : Container(),
+              Hero(
+                tag: 'artwork-${artwork.id}',
+                child: artwork.imageUrl.isNotEmpty
+                    ? Image.network(artwork.imageUrl, fit: BoxFit.cover)
+                    : Container(),
+              ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(

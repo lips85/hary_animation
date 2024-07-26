@@ -1,6 +1,7 @@
 // lib/1_final_project/views/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 import 'package:hary_animation/1_final_project/viewmodels/artwork_list_viewmodel.dart';
 import 'package:hary_animation/1_final_project/views/artwork_detail_screen.dart';
 
@@ -12,6 +13,10 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final PageController _pageController = PageController(
+    viewportFraction: 0.8,
+  );
+
   @override
   void initState() {
     super.initState();
@@ -23,6 +28,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final artworks = ref.watch(artworkListProvider);
+    final double containerHeight = MediaQuery.of(context).size.height * 0.6;
 
     return Scaffold(
       appBar: AppBar(
@@ -30,32 +36,61 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       body: artworks.isEmpty
           ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: artworks.length,
-              itemBuilder: (context, index) {
-                final artwork = artworks[index];
-                return ListTile(
-                  leading: artwork.imageUrl.isNotEmpty
-                      ? Image.network(artwork.imageUrl,
-                          width: 50, height: 50, fit: BoxFit.cover)
-                      : Container(
-                          width: 50,
-                          height: 50,
-                          color: Colors.grey,
-                          child: const Icon(Icons.image, color: Colors.white)),
-                  title: Text(artwork.title),
-                  subtitle: Text(artwork.artist),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ArtworkDetailScreen(artworkId: artwork.id),
+          : Stack(
+              children: [
+                PageView.builder(
+                  controller: _pageController,
+                  itemCount: artworks.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    final artwork = artworks[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ArtworkDetailScreen(artworkId: artwork.id),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Hero(
+                              tag: 'artwork-${artwork.id}',
+                              child: Container(
+                                height: containerHeight,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: artwork.imageUrl.isNotEmpty
+                                        ? NetworkImage(artwork.imageUrl)
+                                        : const AssetImage(
+                                            'assets/placeholder.jpg'),
+                                    fit: BoxFit.scaleDown,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Gap(30),
+                            Text(
+                              artwork.title,
+                              style: const TextStyle(fontSize: 26),
+                            ),
+                            const Gap(10),
+                            Text(
+                              artwork.artist,
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
-                );
-              },
+                ),
+              ],
             ),
     );
   }

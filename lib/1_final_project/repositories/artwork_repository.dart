@@ -9,13 +9,11 @@ class ArtworkRepository {
   ArtworkRepository(this.apiService);
 
   Future<List<Artwork>> fetchArtworks() async {
-    final List<dynamic> data = await apiService.fetchArtworks();
-    return data.map((item) => Artwork.fromJson(item)).toList();
+    return await apiService.fetchArtworks();
   }
 
   Future<Artwork> fetchArtworkDetails(int id) async {
-    final Map<String, dynamic> data = await apiService.fetchArtworkDetails(id);
-    return Artwork.fromJson(data);
+    return await apiService.fetchArtworkDetails(id);
   }
 }
 
