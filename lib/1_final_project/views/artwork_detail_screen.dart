@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hary_animation/1_final_project/viewmodels/artwork_detail_viewmodel.dart';
-import 'package:hary_animation/1_final_project/models/artwork.dart';
 
 class ArtworkDetailScreen extends ConsumerWidget {
   final int artworkId;
@@ -11,11 +10,17 @@ class ArtworkDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final artworkDetail = ref.watch(artworkDetailProvider(artworkId));
+    final artworkDetail = ref.watch(artworkDetailFutureProvider(artworkId));
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Artwork Details'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: artworkDetail.when(
         data: (artwork) => SingleChildScrollView(

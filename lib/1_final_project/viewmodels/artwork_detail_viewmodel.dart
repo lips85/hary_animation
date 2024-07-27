@@ -1,7 +1,7 @@
 // lib/1_final_project/viewmodels/artwork_detail_viewmodel.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hary_animation/1_final_project/repositories/artwork_repository.dart';
 import 'package:hary_animation/1_final_project/models/artwork.dart';
+import 'package:hary_animation/1_final_project/repositories/artwork_repository.dart';
 
 class ArtworkDetailViewModel extends StateNotifier<AsyncValue<Artwork>> {
   final ArtworkRepository artworkRepository;
@@ -19,10 +19,8 @@ class ArtworkDetailViewModel extends StateNotifier<AsyncValue<Artwork>> {
   }
 }
 
-final artworkDetailProvider = StateNotifierProvider.family<
-    ArtworkDetailViewModel, AsyncValue<Artwork>, int>((ref, id) {
+final artworkDetailFutureProvider =
+    FutureProvider.family<Artwork, int>((ref, id) async {
   final repository = ref.watch(artworkRepositoryProvider);
-  final viewModel = ArtworkDetailViewModel(repository);
-  viewModel.fetchArtworkDetails(id);
-  return viewModel;
+  return await repository.fetchArtworkDetails(id);
 });

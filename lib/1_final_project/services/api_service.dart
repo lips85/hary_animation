@@ -9,12 +9,21 @@ class ApiService {
 
   Future<List<Artwork>> fetchArtworks() async {
     final response = await http.get(Uri.parse(
-        '$_baseUrl/artworks?fields=id,title,artist_display,image_id'));
+        '$_baseUrl/artworks?limit=100&fields=id,title,artist_display,image_id'));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return data['data']
+      final artworks = (data['data'] as List)
+          .where(
+              (json) => json['image_id'] != null && json['image_id'].isNotEmpty)
           .map<Artwork>((json) => Artwork.fromJson(json))
           .toList();
+
+      // 중복 제거 및 작가 이름순으로 정렬
+      final uniqueArtworks = {
+        for (var artwork in artworks) artwork.title: artwork
+      }.values.toList();
+      uniqueArtworks.sort((a, b) => a.artist.compareTo(b.artist));
+      return uniqueArtworks;
     } else {
       throw Exception('Failed to load artworks');
     }

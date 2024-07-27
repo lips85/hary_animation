@@ -1,9 +1,9 @@
-// lib/1_final_project/main.dart
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hary_animation/1_final_project/views/home_screen.dart';
+import 'package:hary_animation/1_final_project/router.dart';
+import 'package:hary_animation/1_final_project/const/text_style.dart';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
@@ -28,8 +28,10 @@ class HaryFinalAnimation extends StatelessWidget {
       title: 'Art Institute of Chicago',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: "Vic Hand",
       ),
-      home: const HomeScreen(),
+      initialRoute: '/',
+      onGenerateRoute: AppRouter.generateRoute,
     );
   }
 }
