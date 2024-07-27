@@ -2,7 +2,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -155,10 +154,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                 ),
                                               ],
                                             ),
-                                            child:
-                                                Image.network(artwork.imageUrl)
-                                                    .animate()
-                                                    .fadeIn(duration: 600.ms),
+                                            child: Image.network(
+                                              artwork.imageUrl,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
                                         const Gap(30),
@@ -169,7 +168,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                         ),
                                         const Gap(50),
                                         Text(
-                                          artwork.artist,
+                                          artwork.artistTitle,
                                           style: MyText().bodyLarge(),
                                         ),
                                       ],

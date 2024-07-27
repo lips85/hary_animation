@@ -9,14 +9,16 @@ class ArtworkRepository {
   ArtworkRepository(this.apiService);
 
   Future<List<Artwork>> fetchArtworks() async {
-    return await apiService.fetchArtworks();
+    final artworksData = await apiService.fetchArtworks();
+    return artworksData.map<Artwork>((json) => Artwork.fromJson(json)).toList();
   }
 
   Future<Artwork> fetchArtworkDetails(int id) async {
-    return await apiService.fetchArtworkDetails(id);
+    final artworkData = await apiService.fetchArtworkDetails(id);
+    return Artwork.fromJson(artworkData);
   }
 }
 
-final artworkRepositoryProvider = Provider((ref) {
-  return ArtworkRepository(ref.watch(apiServiceProvider));
+final artworkRepositoryProvider = Provider<ArtworkRepository>((ref) {
+  return ArtworkRepository(ref.read(apiServiceProvider));
 });

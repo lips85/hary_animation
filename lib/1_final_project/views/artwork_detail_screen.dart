@@ -47,7 +47,7 @@ class ArtworkDetailScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Artist: ${artwork.artist}',
+                      'Artist: ${artwork.artistTitle}',
                       style: const TextStyle(fontSize: 18),
                     ),
                   ],
