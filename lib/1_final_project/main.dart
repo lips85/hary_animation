@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hary_animation/1_final_project/router.dart';
-import 'package:hary_animation/1_final_project/const/text_style.dart';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
@@ -25,6 +24,7 @@ class HaryFinalAnimation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Art Institute of Chicago',
       theme: ThemeData(
         primarySwatch: Colors.blue,

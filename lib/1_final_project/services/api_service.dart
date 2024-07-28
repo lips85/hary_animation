@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hary_animation/1_final_project/models/artwork.dart';
+import 'package:hary_animation/1_final_project/models/artwork_detail.dart';
 
 class ApiService {
   final String _baseUrl = 'https://api.artic.edu/api/v1';
@@ -33,16 +34,16 @@ class ApiService {
     }
   }
 
-  Future<Artwork> fetchArtworkDetails(int id) async {
+  Future<ArtworkDetail> fetchArtworkDetails(int id) async {
     final response = await http.get(Uri.parse(
-        '$_baseUrl/artworks/$id?fields=id,title,artist_title,image_id'));
+        '$_baseUrl/artworks/$id?fields=id,title,artist_title,image_id,description,date,medium'));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)['data'];
       data['image_url'] = data['image_id'] != null &&
               data['image_id'].isNotEmpty
           ? 'https://www.artic.edu/iiif/2/${data['image_id']}/full/800,/0/default.jpg'
           : '';
-      return Artwork.fromJson(data);
+      return ArtworkDetail.fromJson(data);
     } else {
       throw Exception('Failed to load artwork details');
     }
