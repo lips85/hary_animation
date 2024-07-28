@@ -8,11 +8,7 @@ class AppRouter {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(builder: (_) => const HomeScreen());
-      case '/detail':
-        final int id = settings.arguments as int;
-        return MaterialPageRoute(
-          builder: (_) => ArtworkDetailScreen(artworkId: id),
-        );
+
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
