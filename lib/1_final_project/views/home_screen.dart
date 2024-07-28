@@ -1,6 +1,5 @@
 // lib/1_final_project/views/home_screen.dart
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -103,7 +102,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             Colors.black.withOpacity(0.7),
                             BlendMode.darken,
                           ),
-                          image: NetworkImage(artworks[_currentPage].imageUrl),
+                          image: NetworkImage(
+                            artworks[_currentPage].imageUrl.isNotEmpty
+                                ? artworks[_currentPage].imageUrl
+                                : 'https://via.placeholder.com/800',
+                          ),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -154,10 +157,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                 ),
                                               ],
                                             ),
-                                            child: Image.network(
-                                              artwork.imageUrl,
-                                              fit: BoxFit.cover,
-                                            ),
+                                            child: artwork.imageUrl.isNotEmpty
+                                                ? Image.network(
+                                                    artwork.imageUrl,
+                                                    fit: BoxFit.cover,
+                                                    errorBuilder: (context,
+                                                        error, stackTrace) {
+                                                      return Container(
+                                                        width: 800,
+                                                        height: 800,
+                                                        color: Colors.white,
+                                                        child: const Center(
+                                                          child: Text(
+                                                            'Image not available',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  )
+                                                : Container(
+                                                    width: 800,
+                                                    height: 800,
+                                                    color: Colors.white,
+                                                    child: const Center(
+                                                      child: Text(
+                                                        'Image not available',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                    ),
+                                                  ),
                                           ),
                                         ),
                                         const Gap(30),

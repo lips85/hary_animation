@@ -16,7 +16,7 @@ class Artwork {
     return Artwork(
       id: json['id'],
       title: json['title'],
-      artistTitle: json['artist_title'] ?? "Unkwon",
+      artistTitle: json['artist_title'] ?? 'Unknown',
       imageUrl: json['image_url'] ?? '',
     );
   }

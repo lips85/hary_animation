@@ -30,8 +30,34 @@ class ArtworkDetailScreen extends ConsumerWidget {
               Hero(
                 tag: 'artwork-${artwork.id}',
                 child: artwork.imageUrl.isNotEmpty
-                    ? Image.network(artwork.imageUrl, fit: BoxFit.cover)
-                    : Container(),
+                    ? Image.network(
+                        artwork.imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            width: double.infinity,
+                            height: 300,
+                            color: Colors.grey,
+                            child: const Center(
+                              child: Text(
+                                'Image not available',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                    : Container(
+                        width: double.infinity,
+                        height: 300,
+                        color: Colors.grey,
+                        child: const Center(
+                          child: Text(
+                            'Image not available',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
